@@ -7,31 +7,34 @@ user = 'some user'
 pw = 'some password'
 
 
-def get_cookies(apic):
+def get_cookies(a_apic):
     username = user
     password = pw
-    url = apic + '/api/aaaLogin.json'
+    url = a_apic + '/api/aaaLogin.json'
     auth = dict(aaaUser=dict(attributes=dict(name=username, pwd=password)))
     authenticate = requests.post(url, data=json.dumps(auth), verify=False)
     return authenticate.cookies
 
-def get_subnets(apic, cookies):
+
+def get_subnets(a_apic, cookies):
     uri = '/api/class/fvSubnet.json'
-    url = apic + uri
+    url = a_apic + uri
     req = requests.get(url, cookies=cookies, verify=False)
     response = req.text
     return response
 
-def get_aep(apic, cookies):
+
+def get_aep(a_apic, cookies):
     uri = '/api/node/mo/uni/tn-ABBOTT.json?query-target=subtree&target-subtree-class=fvAEPg'
-    url = apic + uri
+    url = a_apic + uri
     req = requests.get(url, cookies=cookies, verify=False)
     response = req.text
     return response
 
-def get_stuff(apic, cookies):
+
+def get_stuff(a_apic, cookies):
     uri = '/api/node/mo/uni/tn-ABBOTT.json?query-target=subtree&target-subtree-class=fvTenant,fvAp,fvAEPg,fvRsBd,fvCtx,fvRtCtx'
-    url = apic + uri
+    url = a_apic + uri
     req = requests.get(url, cookies=cookies, verify=False)
     response = req.text
     return response
@@ -55,11 +58,10 @@ if __name__ == "__main__":
     r_stuff_dict = json.loads(r_stuff)
     stuff = r_stuff_dict['imdata']
 
-    # pprint(subnets)
-    print('\n-- SUBNETS --')
+    print('\n--- SUBNETS --')
     for subs in subnets:
         print(subs['fvSubnet']['attributes']['ip'])
-    print('\n-- AEPS ---')
+    print('\n--- AEPS ---')
     pprint(aeps)
     print('\n--- STUFF ---')
     pprint(stuff)
